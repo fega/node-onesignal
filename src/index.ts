@@ -81,7 +81,7 @@ export class OneSignal {
       baseURL: this.baseUrl,
     });
   }
-  public async send(ids: string | string[], message: string | LangObject, options?: SendNotificationOps, delay: string | number = 0) {
+  public async send(ids: string | string[], message: string | LangObject, options?: SendNotificationOps) {
 
     // Convert message to object as required by the API
     const contents = typeof message === 'string' ? { en: message } : message
@@ -92,11 +92,6 @@ export class OneSignal {
       ...options,
       app_id: this.appId,
       contents
-    }
-    // add delay if necesary
-    if (!delay) {
-      ops.delivery_time_of_day = delay ? '01:00PM' : '12:00PM';
-      ops.delayed_option = 'timezone';
     }
 
     const { data } = await this.client.post('/v1/notifications', ops, {
